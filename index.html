@@ -1,0 +1,313 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#ffe4ec">
+<title>Für Mara</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>❤️</text></svg>">
+<style>
+  :root{
+    --bg1:#fff1f5; --bg2:#ffd6e3; --ink:#5a1f33; --soft:#9b4d67;
+    --heart:#ff4d79; --gold:#f4b73f; --card:#ffffffd9;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{
+    font-family:"Segoe UI",system-ui,-apple-system,Roboto,Helvetica,Arial,sans-serif;
+    color:var(--ink);
+    background:radial-gradient(120% 90% at 50% 0%,var(--bg1),var(--bg2));
+    overflow:hidden; -webkit-tap-highlight-color:transparent; user-select:none;
+  }
+  #hearts,#fx,#bxl{position:fixed;inset:0;pointer-events:none}
+  /* Brüssel-Abendhimmel, wird beim Auspacken eingeblendet */
+  #bxl{opacity:0;transition:opacity 2.2s ease;
+    background:linear-gradient(180deg,#1d2457 0%,#4a2f73 35%,#b04f7e 62%,#f08a6b 82%,#ffc48a 100%)}
+  #bxl.show{opacity:1}
+  #bxl svg.sky{position:absolute;left:50%;bottom:0;transform:translateX(-50%);width:100%;max-width:900px;height:auto;display:block}
+  #bxl .ground{position:absolute;left:0;right:0;bottom:0;height:6px;background:#22163a}
+  #bxl .star{position:absolute;width:2px;height:2px;border-radius:50%;background:#fff;animation:tw 3s ease-in-out infinite}
+  @keyframes tw{50%{opacity:.2}}
+  #hearts span{position:absolute;bottom:-40px;animation:rise linear infinite;opacity:.55}
+  @keyframes rise{
+    0%{transform:translateY(0) translateX(0) rotate(0)}
+    50%{transform:translateY(-55vh) translateX(18px) rotate(12deg)}
+    100%{transform:translateY(-115vh) translateX(-12px) rotate(-8deg);opacity:0}
+  }
+  main{position:relative;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px 16px;text-align:center}
+  .scene{transition:opacity .8s, transform .8s}
+  .scene.hidden{opacity:0;transform:translateY(30px) scale(.96);pointer-events:none;position:absolute}
+  h1{font-size:clamp(2rem,9vw,3.4rem);line-height:1.1;font-weight:800;letter-spacing:-.5px}
+  h1 .name{display:block;color:var(--heart);font-size:1.2em;margin-bottom:.2em;
+    animation:beat 1.6s ease-in-out infinite}
+  @keyframes beat{0%,100%{transform:scale(1)}15%{transform:scale(1.08)}30%{transform:scale(.98)}45%{transform:scale(1.05)}}
+  .hint{margin-top:18px;color:var(--soft);font-size:1.05rem;animation:pulse 2s ease-in-out infinite}
+  @keyframes pulse{50%{opacity:.45}}
+
+  /* Torte + Kerze */
+  .cake{width:min(62vw,260px);margin:26px auto 4px;cursor:pointer;display:block}
+  .flame{transform-origin:50% 90%;animation:flicker .18s ease-in-out infinite alternate}
+  @keyframes flicker{from{transform:scale(1,1) rotate(-2deg)}to{transform:scale(.92,1.08) rotate(2deg)}}
+  .glow{animation:glow 1.4s ease-in-out infinite alternate}
+  @keyframes glow{from{opacity:.35}to{opacity:.7}}
+  .out .flame,.out .glow{opacity:0;transition:opacity .25s}
+  .smoke{opacity:0}
+  .out .smoke{animation:smoke 2.2s ease-out forwards}
+  @keyframes smoke{0%{opacity:.7;transform:translateY(0) scale(.6)}100%{opacity:0;transform:translateY(-60px) scale(1.8)}}
+
+  /* Geschenk */
+  .card{background:var(--card);backdrop-filter:blur(6px);border-radius:24px;padding:26px 22px;
+    box-shadow:0 12px 40px #ff4d7933;max-width:420px;width:100%}
+  .card h2{font-size:clamp(1.5rem,6.5vw,2rem);margin-bottom:8px}
+  .card p{font-size:1.08rem;line-height:1.5;color:var(--soft)}
+  .gift{font-size:5.5rem;margin:16px 0 6px;cursor:pointer;display:inline-block;animation:wiggle 2.4s ease-in-out infinite}
+  @keyframes wiggle{0%,80%,100%{transform:rotate(0)}84%{transform:rotate(-12deg)}88%{transform:rotate(10deg)}92%{transform:rotate(-8deg)}96%{transform:rotate(5deg)}}
+  .clues{display:flex;flex-wrap:wrap;justify-content:center;gap:10px;margin:18px 0 6px;min-height:52px}
+  .clue{background:#fff;border-radius:999px;padding:9px 15px;font-size:1.05rem;box-shadow:0 3px 12px #5a1f3318;
+    opacity:0;transform:translateY(14px) scale(.8);transition:all .5s cubic-bezier(.2,1.6,.4,1)}
+  .clue.show{opacity:1;transform:none}
+  .reveal{opacity:0;transform:scale(.6);transition:all .8s cubic-bezier(.2,1.5,.4,1)}
+  .reveal.show{opacity:1;transform:none}
+  .reveal .big{font-size:clamp(1.9rem,8.5vw,2.7rem);font-weight:800;line-height:1.15;margin:14px 0 6px}
+  .flag{display:inline-flex;border-radius:4px;overflow:hidden;vertical-align:middle;margin:0 4px;box-shadow:0 1px 4px #0003}
+  .flag i{width:12px;height:24px;display:block}
+  .sig{margin-top:18px;font-size:1.2rem;color:var(--ink);font-style:italic}
+  button.again{margin-top:14px;border:0;background:var(--heart);color:#fff;font-size:1rem;padding:10px 18px;border-radius:999px;cursor:pointer}
+  @media (prefers-reduced-motion:reduce){*{animation-duration:0s!important;animation-iteration-count:1!important;transition:none!important}}
+</style>
+</head>
+<body>
+<div id="bxl" aria-hidden="true"><div class="ground"></div></div>
+<div id="hearts" aria-hidden="true"></div>
+<canvas id="fx" aria-hidden="true"></canvas>
+
+<main>
+  <!-- Szene 1: Gruß + Kerze -->
+  <section class="scene" id="s1">
+    <h1><span class="name">Liebe Mara ❤</span>Herzlichen Glückwunsch</h1>
+    <svg class="cake" id="cake" viewBox="0 0 200 210" role="button" aria-label="Kerze auspusten">
+      <defs>
+        <radialGradient id="g" cx="50%" cy="50%" r="50%">
+          <stop offset="0" stop-color="#ffd76b"/><stop offset="1" stop-color="#ffd76b" stop-opacity="0"/>
+        </radialGradient>
+      </defs>
+      <circle class="glow" cx="100" cy="38" r="38" fill="url(#g)"/>
+      <!-- Rauch -->
+      <g class="smoke" style="transform-origin:100px 60px">
+        <circle cx="100" cy="50" r="7" fill="#bbb"/><circle cx="106" cy="40" r="6" fill="#ccc"/><circle cx="97" cy="31" r="5" fill="#ddd"/>
+      </g>
+      <!-- Flamme -->
+      <g class="flame">
+        <path d="M100 18 C110 34 112 46 100 60 C88 46 90 34 100 18Z" fill="#ffb22e"/>
+        <path d="M100 32 C105 41 106 48 100 57 C94 48 95 41 100 32Z" fill="#fff3b0"/>
+      </g>
+      <!-- Kerze -->
+      <line x1="100" y1="58" x2="100" y2="66" stroke="#4a3b2a" stroke-width="2"/>
+      <rect x="92" y="64" width="16" height="56" rx="3" fill="#fff"/>
+      <path d="M92 74 L108 68 M92 88 L108 82 M92 102 L108 96 M92 116 L108 110" stroke="#ff7aa0" stroke-width="5"/>
+      <!-- Torte -->
+      <rect x="30" y="118" width="140" height="70" rx="12" fill="#f9b8cb"/>
+      <rect x="30" y="150" width="140" height="8" fill="#fff" opacity=".7"/>
+      <path d="M30 128 Q30 116 44 116 L156 116 Q170 116 170 128 L170 134 Q160 146 150 134 Q140 146 130 134 Q120 146 110 134 Q100 146 90 134 Q80 146 70 134 Q60 146 50 134 Q40 146 30 134Z" fill="#fff"/>
+      <g fill="#ff4d79">
+        <path transform="translate(55 168) scale(.55)" d="M0 6 C0 -2 10 -2 10 4 C10 -2 20 -2 20 6 C20 14 10 18 10 22 C10 18 0 14 0 6Z"/>
+        <path transform="translate(95 168) scale(.55)" d="M0 6 C0 -2 10 -2 10 4 C10 -2 20 -2 20 6 C20 14 10 18 10 22 C10 18 0 14 0 6Z"/>
+        <path transform="translate(135 168) scale(.55)" d="M0 6 C0 -2 10 -2 10 4 C10 -2 20 -2 20 6 C20 14 10 18 10 22 C10 18 0 14 0 6Z"/>
+      </g>
+      <ellipse cx="100" cy="194" rx="88" ry="10" fill="#fff" opacity=".9"/>
+    </svg>
+    <p class="hint" id="hint">Packe dein Geschenk aus – tipp auf die Kerze 🕯️</p>
+  </section>
+
+  <!-- Szene 2: Geschenk-Teaser -->
+  <section class="scene hidden" id="s2">
+    <div class="card">
+      <h2>Und jetzt … dein Geschenk!</h2>
+      <p id="giftText">Tipp auf das Päckchen 👇</p>
+      <div class="gift" id="gift" role="button" aria-label="Geschenk öffnen">🎁</div>
+      <div class="clues" id="clues">
+        <span class="clue">🧇 Waffeln</span>
+        <span class="clue">🍫 Pralinen</span>
+        <span class="clue">🍟 Fritten</span>
+        <span class="clue">🏛️ Kunstberg</span>
+        <span class="clue">🚄 Mit der Bahn</span>
+      </div>
+      <div class="reveal" id="reveal">
+        <div class="big">Ein Wochenende<br>in Brüssel!
+          <span class="flag" aria-label="Belgien"><i style="background:#000"></i><i style="background:#fdda24"></i><i style="background:#ef3340"></i></span>
+        </div>
+        <p>Koffer packen, Alltag vergessen –<br>nur wir zwei. 🧳🍾🍽️❤</p>
+        <p class="sig">Alles Liebe zum Geburtstag<br>von deinem Mann</p>
+        <button class="again" id="again">♪ Nochmal das Ständchen</button>
+      </div>
+    </div>
+  </section>
+</main>
+
+<script>
+(() => {
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* --- schwebende Herzen im Hintergrund --- */
+  const hearts = document.getElementById('hearts');
+  const hs = ['❤','💕','💗','💖','🤍'];
+  const N = reduce ? 0 : 18;
+  for (let i = 0; i < N; i++) {
+    const s = document.createElement('span');
+    s.textContent = hs[i % hs.length];
+    s.style.left = Math.random() * 100 + 'vw';
+    s.style.fontSize = 14 + Math.random() * 22 + 'px';
+    s.style.animationDuration = 9 + Math.random() * 10 + 's';
+    s.style.animationDelay = -Math.random() * 18 + 's';
+    hearts.appendChild(s);
+  }
+
+  /* --- Brüssel-Silhouette (selbst gezeichnet) --- */
+  (function skyline(){
+    const ink = '#22163a', lit = '#ffd27a';
+    let g = '';
+    const win = (x, y) => `<rect x="${x}" y="${y}" width="2.2" height="3.2" fill="${lit}" opacity=".9"/>`;
+    // Giebelhäuser vom Grand-Place (Treppengiebel)
+    const house = (x, w, h) => {
+      const t = 150 - h, st = w / 5;
+      g += `<path d="M${x} 150V${t}h${st}v-5h${st}v-5h${st}v5h${st}v5h${st}V150Z" fill="${ink}"/>`;
+      for (let yy = t + 6; yy < 144; yy += 9) for (let xx = x + 3; xx < x + w - 3; xx += 6) if ((xx*7 + yy) % 3) g += win(xx, yy);
+    };
+    [[110,22,46],[132,18,38],[150,22,52],[236,20,50],[256,22,40],[278,18,47]].forEach(a => house(...a));
+    // Rathaus mit Turm und Spitze
+    g += `<path d="M172 150V104h56V150Z M178 104l4-8h36l4 8Z" fill="${ink}"/>`;
+    g += `<path d="M193 104V56h14V104Z M195 56V42h10V56Z M196.5 42L200 14 203.5 42Z M199.6 14V8h.8V14Z" fill="${ink}"/>`;
+    for (let yy = 112; yy < 146; yy += 10) for (let xx = 176; xx < 226; xx += 7) if (xx < 192 || xx > 206) g += win(xx, yy);
+    g += win(199, 62) + win(199, 74) + win(199, 86);
+    // Kathedrale St. Michael und St. Gudula
+    g += `<path d="M314 150V74h13V150Z M339 150V74h13V150Z M327 150V98l6-8 6 8V150Z" fill="${ink}"/>`;
+    for (const tx of [314, 339]) for (let i = 0; i < 4; i++) g += `<rect x="${tx + i*3.6}" y="70" width="2" height="4" fill="${ink}"/>`;
+    g += `<circle cx="333" cy="108" r="4" fill="${lit}" opacity=".8"/>`;
+    // Atomium: 9 Kugeln, verbunden
+    const ax = 52, ay = 82, k = .72;
+    const P = [[0,-46],[0,46],[0,0],[30,0],[15,26],[-15,26],[-30,0],[-15,-26],[15,-26]].map(([x,y]) => [ax + x*k, ay + y*k]);
+    const E = [[0,7],[0,8],[0,3],[0,6],[1,4],[1,5],[1,3],[1,6],[2,3],[2,4],[2,5],[2,6],[2,7],[2,8],[3,4],[4,5],[5,6],[6,7],[7,8],[8,3]];
+    for (const [a,b] of E) g += `<line x1="${P[a][0]}" y1="${P[a][1]}" x2="${P[b][0]}" y2="${P[b][1]}" stroke="${ink}" stroke-width="2.2"/>`;
+    for (const [x,y] of P) g += `<circle cx="${x}" cy="${y}" r="5.2" fill="${ink}"/><circle cx="${x-1.6}" cy="${y-1.6}" r="1.4" fill="#fff" opacity=".35"/>`;
+    g += `<path d="M${ax} ${ay+33}L${ax-14} 150M${ax} ${ay+33}L${ax+14} 150M${ax} ${ay+33}V150" stroke="${ink}" stroke-width="2.5"/>`;
+    // Bäume und Boden
+    for (const x of [92, 300, 364, 380]) g += `<ellipse cx="${x}" cy="143" rx="9" ry="9" fill="${ink}"/>`;
+    g += `<rect x="0" y="148" width="400" height="12" fill="${ink}"/>`;
+    const bxl = document.getElementById('bxl');
+    bxl.insertAdjacentHTML('afterbegin', `<svg class="sky" viewBox="0 0 400 160" preserveAspectRatio="xMidYMax meet">${g}</svg>`);
+    for (let i = 0; i < 40; i++) {
+      const s = document.createElement('i'); s.className = 'star';
+      s.style.left = Math.random()*100 + '%'; s.style.top = Math.random()*45 + '%';
+      s.style.animationDelay = -Math.random()*3 + 's'; bxl.appendChild(s);
+    }
+  })();
+
+  /* --- Herz-Konfetti --- */
+  const cv = document.getElementById('fx'), cx = cv.getContext('2d');
+  let parts = [], raf = 0;
+  function size(){ cv.width = innerWidth * devicePixelRatio; cv.height = innerHeight * devicePixelRatio; }
+  size(); addEventListener('resize', size);
+  function heart(x, y, r, rot, col){
+    cx.save(); cx.translate(x, y); cx.rotate(rot); cx.scale(r, r);
+    cx.beginPath(); cx.moveTo(0, .3);
+    cx.bezierCurveTo(0, 0, -.5, 0, -.5, .3); cx.bezierCurveTo(-.5, .6, 0, .8, 0, 1);
+    cx.bezierCurveTo(0, .8, .5, .6, .5, .3); cx.bezierCurveTo(.5, 0, 0, 0, 0, .3);
+    cx.fillStyle = col; cx.fill(); cx.restore();
+  }
+  function burst(x, y, colors, n = 90){
+    if (reduce) return;
+    const d = devicePixelRatio;
+    for (let i = 0; i < n; i++) {
+      const a = Math.random() * Math.PI * 2, v = (4 + Math.random() * 9) * d;
+      parts.push({x: x*d, y: y*d, vx: Math.cos(a)*v, vy: Math.sin(a)*v - 6*d,
+        r: (10 + Math.random()*16) * d, rot: Math.random()*6, vr: (Math.random()-.5)*.3,
+        c: colors[i % colors.length], life: 1});
+    }
+    if (!raf) loop();
+  }
+  function loop(){
+    cx.clearRect(0, 0, cv.width, cv.height);
+    const d = devicePixelRatio;
+    parts = parts.filter(p => p.life > 0 && p.y < cv.height + 50);
+    for (const p of parts) {
+      p.vy += .25*d; p.vx *= .985; p.x += p.vx; p.y += p.vy; p.rot += p.vr; p.life -= .006;
+      cx.globalAlpha = Math.max(p.life, 0); heart(p.x, p.y, p.r, p.rot, p.c);
+    }
+    cx.globalAlpha = 1;
+    raf = parts.length ? requestAnimationFrame(loop) : 0;
+  }
+
+  /* --- Spieluhr: Happy Birthday (gemeinfrei), im Browser erzeugt --- */
+  let ac;
+  const F = {G4:392,A4:440,B4:493.88,C5:523.25,D5:587.33,E5:659.25,F5:698.46,G5:783.99};
+  const song = [
+    ['G4',.75],['G4',.25],['A4',1],['G4',1],['C5',1],['B4',2],
+    ['G4',.75],['G4',.25],['A4',1],['G4',1],['D5',1],['C5',2],
+    ['G4',.75],['G4',.25],['G5',1],['E5',1],['C5',1],['B4',1],['A4',2],
+    ['F5',.75],['F5',.25],['E5',1],['C5',1],['D5',1],['C5',3]
+  ];
+  function play(){
+    try {
+      ac = ac || new (window.AudioContext || window.webkitAudioContext)();
+      ac.resume();
+      const beat = .42; let t = ac.currentTime + .15;
+      const master = ac.createGain(); master.gain.value = .22; master.connect(ac.destination);
+      for (const [n, b] of song) {
+        for (const [mult, vol] of [[1,1],[2,.35],[4,.08]]) {   // Spieluhr-Klang: Grundton + Obertöne
+          const o = ac.createOscillator(), g = ac.createGain();
+          o.type = 'sine'; o.frequency.value = F[n] * mult;
+          g.gain.setValueAtTime(0, t);
+          g.gain.linearRampToValueAtTime(vol, t + .008);
+          g.gain.exponentialRampToValueAtTime(.0005, t + Math.max(b*beat*1.6, .7));
+          o.connect(g).connect(master); o.start(t); o.stop(t + 2);
+        }
+        t += b * beat;
+      }
+    } catch (e) { /* ohne Ton geht's auch */ }
+  }
+
+  /* --- Ablauf --- */
+  const cake = document.getElementById('cake'), s1 = document.getElementById('s1'), s2 = document.getElementById('s2');
+  const pink = ['#ff4d79','#ff8fab','#ffc2d1','#e0245e','#ffffff'];
+  let blown = false;
+  cake.addEventListener('click', e => {
+    if (blown) return; blown = true;
+    cake.classList.add('out');
+    document.getElementById('hint').textContent = 'Happy Birthday! 🎉';
+    play();
+    const r = cake.getBoundingClientRect();
+    setTimeout(() => burst(r.left + r.width/2, r.top + r.height*.15, pink, 120), 300);
+    setTimeout(() => { s1.classList.add('hidden'); s2.classList.remove('hidden'); }, 3800);
+  });
+
+  const gift = document.getElementById('gift');
+  let opened = false;
+  gift.addEventListener('click', () => {
+    if (opened) return; opened = true;
+    gift.style.animation = 'none';
+    document.getElementById('giftText').textContent = 'Ein paar Hinweise …';
+    const clues = [...document.querySelectorAll('.clue')];
+    clues.forEach((c, i) => setTimeout(() => c.classList.add('show'), 600 + i * 900));
+    const tReveal = 600 + clues.length * 900 + 900;
+    setTimeout(() => {
+      gift.style.transition = 'transform .5s, opacity .5s';
+      gift.style.transform = 'scale(1.6) rotate(10deg)'; gift.style.opacity = '0';
+    }, tReveal - 400);
+    setTimeout(() => {
+      gift.style.display = 'none';
+      document.getElementById('clues').style.display = 'none';
+      document.getElementById('giftText').textContent = 'Wir fahren …';
+      document.getElementById('reveal').classList.add('show');
+      document.getElementById('bxl').classList.add('show');
+      burst(innerWidth/2, innerHeight*.4, ['#000000','#fdda24','#ef3340','#ff4d79'], 140);
+    }, tReveal);
+  });
+
+  document.getElementById('again').addEventListener('click', () => {
+    play(); burst(innerWidth/2, innerHeight*.35, pink, 80);
+  });
+})();
+</script>
+</body>
+</html>
